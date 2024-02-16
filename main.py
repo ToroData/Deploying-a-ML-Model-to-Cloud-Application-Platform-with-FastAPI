@@ -4,6 +4,7 @@ import pickle
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
+from ml.train_model import process_data
 
 app = FastAPI()
 
