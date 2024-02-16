@@ -1,6 +1,7 @@
+import uvicorn
+import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-import uvicorn
 
 app = FastAPI()
 
