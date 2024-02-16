@@ -1,9 +1,7 @@
 import requests
 
-# La URL del endpoint de tu API para realizar inferencias
-url = 'http://127.0.0.1:8000/inference/'
+url = 'https://ml-devops-e5e27e0d958f.herokuapp.com/inference/'
 
-# Reemplaza esto con los datos que coincidan con la estructura esperada por tu API
 data = { 'age':50,
             'workclass':"Private", 
             'fnlgt':234721,
@@ -20,13 +18,12 @@ data = { 'age':50,
             'native_country':"United-States"
             }
 
-# Realiza la solicitud POST
+# POST
 response = requests.post(url, json=data)
 
-# Verifica que la solicitud fue exitosa
+
 if response.status_code == 200:
     print("Solicitud exitosa.")
-    # Imprime la respuesta de la inferencia
     print(response.json())
 else:
     print(f"Error en la solicitud. Código de estado: {response.status_code}")
