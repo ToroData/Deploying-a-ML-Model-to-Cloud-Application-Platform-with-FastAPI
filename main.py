@@ -46,7 +46,7 @@ class CensusData(BaseModel):
 
 # path to saved artifacts
 savepath = './model'
-filename = ['trained_model.pkl', 'encoder.pkl', 'labelizer.pkl']
+filename = ['model.pkl', 'encoder.pkl', 'labelizer.pkl']
 
 @app.get("/")
 async def root():
