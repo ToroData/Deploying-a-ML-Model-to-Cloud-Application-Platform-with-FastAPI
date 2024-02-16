@@ -2,7 +2,7 @@ import sys
 import logging
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import fbeta_score, precision_score, recall_score
+from sklearn.metrics import fbeta_score, precision_score, recall_score, confusion_matrix
 
 
 # Optional: implement hyperparameter tuning.
