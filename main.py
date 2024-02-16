@@ -1,11 +1,11 @@
 import uvicorn
+import pickle
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
 app = FastAPI()
 
-# Modelo Pydantic para la entrada de datos, usando Field para manejar nombres con guiones
 class CensusData(BaseModel):
     age: int
     workclass: str = Field(..., alias="work-class")
