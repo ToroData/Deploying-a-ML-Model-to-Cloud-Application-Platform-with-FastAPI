@@ -6,41 +6,42 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from ml.train_model import process_data
 
-app = FastAPI()
+app = FastAPI(title="Census Income Prediction API",
+              version="1.0.0")
 
 class CensusData(BaseModel):
     age: int
-    workclass: str = Field(..., alias="work-class")
+    workclass: str 
     fnlgt: int
     education: str
-    education_num: int = Field(..., alias="education-num")
-    marital_status: str = Field(..., alias="marital-status")
+    education_num: int
+    marital_status: str
     occupation: str
     relationship: str
     race: str
     sex: str
-    capital_gain: int = Field(..., alias="capital-gain")
-    capital_loss: int = Field(..., alias="capital-loss")
-    hours_per_week: int = Field(..., alias="hours-per-week")
-    native_country: str = Field(..., alias="native-country")
-
+    capital_gain: int
+    capital_loss: int
+    hours_per_week: int
+    native_country: str
+    
     class Config:
         schema_extra = {
             "example": {
                 "age": 39,
-                "work-class": "State-gov",
+                "workclass": "State-gov",
                 "fnlgt": 77516,
                 "education": "Bachelors",
-                "education-num": 13,
-                "marital-status": "Never-married",
+                "education_num": 13,
+                "marital_status": "Never-married",
                 "occupation": "Adm-clerical",
                 "relationship": "Not-in-family",
                 "race": "White",
                 "sex": "Male",
-                "capital-gain": 2174,
-                "capital-loss": 0,
-                "hours-per-week": 40,
-                "native-country": "United-States"
+                "capital_gain": 2174,
+                "capital_loss": 0,
+                "hours_per_week": 40,
+                "native_country": "United-States"
             }
         }
 
@@ -54,10 +55,27 @@ async def root():
 
 @app.post("/inference/")
 async def make_inference(data: CensusData):
-    data_dict = data.dict(by_alias=True)
+    # data_dict = data.dict(by_alias=True)
 
-    sample = pd.DataFrame([data_dict])
+    # sample = pd.DataFrame([data_dict])
+    data = {  'age': data.age,
+                'workclass': data.workclass, 
+                'fnlgt': data.fnlgt,
+                'education': data.education,
+                'education-num': data.education_num,
+                'marital-status': data.marital_status,
+                'occupation': data.occupation,
+                'relationship': data.relationship,
+                'race': data.race,
+                'sex': data.sex,
+                'capital-gain': data.capital_gain,
+                'capital-loss': data.capital_loss,
+                'hours-per-week': data.hours_per_week,
+                'native-country': data.native_country,
+                }
+    sample = pd.DataFrame(data, index=[0])
 
+    # apply transformation to sample data
     cat_features = [
                     "workclass",
                     "education",
@@ -83,9 +101,15 @@ async def make_inference(data: CensusData):
                           
     prediction = model.predict(sample)
 
-    prediction_label = '>50K' if prediction[0] else '<=50K'
-    return {"prediction": prediction_label}
+    if prediction[0]>0.5:
+        prediction = '>50K'
+    else:
+        prediction = '<=50K', 
+    data['prediction'] = prediction
+
+
+    return data
 
 if __name__ == "__main__":
-    # uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
     pass
