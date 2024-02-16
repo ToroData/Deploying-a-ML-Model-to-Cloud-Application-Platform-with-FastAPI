@@ -6,8 +6,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from ml.train_model import process_data
 
-app = FastAPI(title="Census Income Prediction API",
-              version="1.0.0")
+app = FastAPI()
 
 class CensusData(BaseModel):
     age: int
@@ -55,9 +54,6 @@ async def root():
 
 @app.post("/inference/")
 async def make_inference(data: CensusData):
-    # data_dict = data.dict(by_alias=True)
-
-    # sample = pd.DataFrame([data_dict])
     data = {  'age': data.age,
                 'workclass': data.workclass, 
                 'fnlgt': data.fnlgt,

@@ -1,5 +1,7 @@
 # Deployment of a Machine Learning Model with FastAPI and Heroku
 
+https://github.com/ToroData/Deploying-a-ML-Model-to-Cloud-Application-Platform-with-FastAPI
+
 This repository contains the third project of Udacity's ML DevOps Engineer Nanodegree. The project's objective is to deploy a machine learning (ML) model using FastAPI on Heroku, enabling an inference endpoint accessible via the web. The project encompasses the end-to-end process from training the ML model to deploying it for real-world use.
 
 ## Project Overview

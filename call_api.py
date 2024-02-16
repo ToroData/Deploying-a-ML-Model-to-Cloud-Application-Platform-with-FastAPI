@@ -23,8 +23,8 @@ response = requests.post(url, json=data)
 
 
 if response.status_code == 200:
-    print("Solicitud exitosa.")
+    print("Successfull.")
     print(response.json())
 else:
-    print(f"Error en la solicitud. Código de estado: {response.status_code}")
+    print(f"Error. Code: {response.status_code}")
     print(response.text)
