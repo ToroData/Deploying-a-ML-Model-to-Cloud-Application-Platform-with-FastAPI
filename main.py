@@ -1,3 +1,4 @@
+import os
 import uvicorn
 import pickle
 import pandas as pd
