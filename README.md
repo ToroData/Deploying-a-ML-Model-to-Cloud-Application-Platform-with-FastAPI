@@ -72,6 +72,8 @@ Unit tests for the API are located in `tests/test_app.py`. Run these tests using
 GitHub Actions is configured to automate testing and linting, ensuring code quality and functionality before deployment to Heroku. Automatic deployments are triggered upon successful completion of these checks.
 ![screenshots/github.png](screenshots/github.png)
 
+![screenshots/github.png](screenshots/continuos_integration.png)
+
 ![screenshots/fast_api.png](screenshots/fastapi.png)
 
 ![screenshots/cd.png](screenshots/cd.png)

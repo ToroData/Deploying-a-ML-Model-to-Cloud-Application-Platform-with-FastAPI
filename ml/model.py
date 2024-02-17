@@ -116,27 +116,12 @@ def compute_confusion_matrix(y, preds, labels=None):
 
 
 def evaluate_model_on_slices(model, X, y, categorical_features, encoder):
-    """
-    Evaluate the performance of the model on slices of the data based on categorical features.
-
-    Args:
-    - model: The trained machine learning model.
-    - X: np.array, the features of the dataset.
-    - y: np.array, the target labels.
-    - categorical_features: list of str, the names of the categorical features.
-    - encoder: OneHotEncoder, the trained OneHotEncoder instance used on the categorical features.
-
-    Returns:
-    - None, but prints out the performance metrics for each slice of the data.
-    """
+    output = ""
     logging.info("Evaluating model on slices...")
-    # Get the feature names after one-hot encoding
     feature_names = encoder.get_feature_names_out(categorical_features)
     
     for feature in categorical_features:
-        # Find the indices for the categories of the current feature
         feature_indices = [i for i, name in enumerate(feature_names) if name.startswith(f"{feature}_")]
-        
         for idx in feature_indices:
             category = feature_names[idx].split('_')[-1]
             subset_mask = X[:, idx] == 1
@@ -146,6 +131,7 @@ def evaluate_model_on_slices(model, X, y, categorical_features, encoder):
             if len(y_subset) > 0:
                 preds_subset = inference(model, X_subset)
                 precision, recall, fbeta = compute_model_metrics(y_subset, preds_subset)
-                print(f"Performance on slice '{feature}={category}': Precision={precision}, Recall={recall}, F-beta={fbeta}")
+                output += f"Performance on slice '{feature}={category}': Precision={precision}, Recall={recall}, F-beta={fbeta}\n"
             else:
-                print(f"No samples for slice '{feature}={category}'.")
+                output += f"No samples for slice '{feature}={category}'.\n"
+    return output

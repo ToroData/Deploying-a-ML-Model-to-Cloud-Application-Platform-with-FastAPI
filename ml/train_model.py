@@ -12,7 +12,7 @@ import numpy as np
 from contextlib import redirect_stdout
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelBinarizer, OneHotEncoder
-from ml.model import train_model, compute_model_metrics, inference
+from ml.model import train_model, compute_model_metrics, inference, evaluate_model_on_slices
 from preprocess.clean import process_data
 
 # Logging configuration
@@ -118,23 +118,32 @@ X_test, y_test, encoder, lb = process_data(
     lb=lb
 )
 
-# Train and save the model
-logging.info("Training...")
-model = train_model(X_train, y_train)
-
 model_filename = "model.pkl"
 encoder_filename = "encoder.pkl"
 lb_filename = "lb.pkl"
 
-# Save model on disk
-logging.info("Saving model...")
-pickle.dump(model, open(os.path.join(output_model_path, model_filename), 'wb'))
-logging.info(f"Model saved to disk: {os.path.join(output_model_path, model_filename)}")
+if os.path.isfile(os.path.join(output_model_path, model_filename)):
+    model = pickle.load(open(os.path.join(output_model_path, model_filename), 'rb'))
+    encoder = pickle.load(open(os.path.join(output_model_path, encoder_filename), 'rb'))
+    lb = pickle.load(open(os.path.join(output_model_path, lb_filename), 'rb'))
+else:
+    # Train and save the model
+    logging.info("Training...")
+    model = train_model(X_train, y_train)
+    # Save model on disk
+    logging.info("Saving model...")
+    pickle.dump(model, open(os.path.join(output_model_path, model_filename), 'wb'))
+    logging.info(f"Model saved to disk: {os.path.join(output_model_path, model_filename)}")
 
-# Save encoder and lb
-pickle.dump(encoder, open(os.path.join(output_model_path, encoder_filename), 'wb'))
-pickle.dump(lb, open(os.path.join(output_model_path, lb_filename), 'wb'))
-logging.info(f"Encoder and LabelBinarizer saved to disk: {output_model_path}")
+    # Save encoder and lb
+    pickle.dump(encoder, open(os.path.join(output_model_path, encoder_filename), 'wb'))
+    pickle.dump(lb, open(os.path.join(output_model_path, lb_filename), 'wb'))
+    logging.info(f"Encoder and LabelBinarizer saved to disk: {output_model_path}")
+
+# Slides output
+slices_output = evaluate_model_on_slices(model, X_train, y_train, cat_features, encoder)
+with open("slice_output.txt", "w") as file:
+    file.write(slices_output)
 
 # Make predictions on the test set
 logging.info("Predicting")
@@ -142,6 +151,4 @@ preds = inference(model, X_test)
 
 # Calculate metrics
 precision, recall, fbeta = compute_model_metrics(y_test, preds)
-
-
 print(f"Precision: {precision}, Recall: {recall}, F-beta: {fbeta}")
