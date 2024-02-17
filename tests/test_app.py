@@ -1,3 +1,7 @@
+"""Script to test the app.
+Author: Ricard Santiago Raigada García
+Date: February, 2024
+"""
 from fastapi.testclient import TestClient
 from main import app
 

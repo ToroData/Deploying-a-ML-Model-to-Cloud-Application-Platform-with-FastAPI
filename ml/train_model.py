@@ -1,4 +1,4 @@
-"""# Script to train machine learning model.
+""" Script to train machine learning model.
 Author: Ricard Santiago Raigada García
 Date: February, 2024
 """
@@ -25,12 +25,13 @@ with open('./config.json', 'r') as f:
 output_clean_data = config['output_clean_data']
 output_model_path = config['output_model_path']
 
+
 def process_data(
-    X, 
-    categorical_features=[], 
-    label=None, 
-    training=True, 
-    encoder=None, 
+    X,
+    categorical_features=[],
+    label=None,
+    training=True,
+    encoder=None,
     lb=None
 ):
     """
@@ -75,17 +76,18 @@ def process_data(
     logging.info("Data processed successfully")
     return X, y, encoder, lb
 
+
 # Load the data
 logging.info("Importing data")
 data = pd.read_csv(output_clean_data)
 
 # Split the data into training and test sets
 logging.info("Splitting...")
-train, test = train_test_split(data, 
-                                test_size=0.20, 
-                                random_state=10, 
-                                stratify=data['salary']
-                                )
+train, test = train_test_split(data,
+                               test_size=0.20,
+                               random_state=10,
+                               stratify=data['salary']
+                               )
 # Define the categorical features for the encoding
 cat_features = [
     "workclass",
@@ -123,8 +125,18 @@ encoder_filename = "encoder.pkl"
 lb_filename = "lb.pkl"
 
 if os.path.isfile(os.path.join(output_model_path, model_filename)):
-    model = pickle.load(open(os.path.join(output_model_path, model_filename), 'rb'))
-    encoder = pickle.load(open(os.path.join(output_model_path, encoder_filename), 'rb'))
+    model = pickle.load(
+        open(
+            os.path.join(
+                output_model_path,
+                model_filename),
+            'rb'))
+    encoder = pickle.load(
+        open(
+            os.path.join(
+                output_model_path,
+                encoder_filename),
+            'rb'))
     lb = pickle.load(open(os.path.join(output_model_path, lb_filename), 'rb'))
 else:
     # Train and save the model
@@ -132,16 +144,31 @@ else:
     model = train_model(X_train, y_train)
     # Save model on disk
     logging.info("Saving model...")
-    pickle.dump(model, open(os.path.join(output_model_path, model_filename), 'wb'))
-    logging.info(f"Model saved to disk: {os.path.join(output_model_path, model_filename)}")
+    pickle.dump(
+        model,
+        open(
+            os.path.join(
+                output_model_path,
+                model_filename),
+            'wb'))
+    logging.info(
+        f"Model saved to disk: {os.path.join(output_model_path, model_filename)}")
 
     # Save encoder and lb
-    pickle.dump(encoder, open(os.path.join(output_model_path, encoder_filename), 'wb'))
+    pickle.dump(
+        encoder,
+        open(
+            os.path.join(
+                output_model_path,
+                encoder_filename),
+            'wb'))
     pickle.dump(lb, open(os.path.join(output_model_path, lb_filename), 'wb'))
-    logging.info(f"Encoder and LabelBinarizer saved to disk: {output_model_path}")
+    logging.info(
+        f"Encoder and LabelBinarizer saved to disk: {output_model_path}")
 
 # Slides output
-slices_output = evaluate_model_on_slices(model, X_train, y_train, cat_features, encoder)
+slices_output = evaluate_model_on_slices(
+    model, X_train, y_train, cat_features, encoder)
 with open("slice_output.txt", "w") as file:
     file.write(slices_output)
 

@@ -1,6 +1,6 @@
 # Deployment of a Machine Learning Model with FastAPI and Heroku
 
-https://github.com/ToroData/Deploying-a-ML-Model-to-Cloud-Application-Platform-with-FastAPI
+[Github Link](https://github.com/ToroData/Deploying-a-ML-Model-to-Cloud-Application-Platform-with-FastAPI)
 
 This repository contains the third project of Udacity's ML DevOps Engineer Nanodegree. The project's objective is to deploy a machine learning (ML) model using FastAPI on Heroku, enabling an inference endpoint accessible via the web. The project encompasses the end-to-end process from training the ML model to deploying it for real-world use.
 
@@ -38,20 +38,19 @@ The project is developed on Windows WSL2 using Python 3.8 within a virtual envir
 3. Install the dependencies using `pip install -r requirements.txt`.
 4. Run `uvicorn main:app --reload` to start the FastAPI application locally.
 
+### Commands
 
-## Commands
 Run to clean the data:
 
-```
+```{Python}
 python -m preprocess.clean
 ```
 
 If you want to train a model locally, run this:
 
-```
+```{Python}
 python -m ml.train_model
 ```
-
 
 ### Deploying to Heroku
 
@@ -78,8 +77,16 @@ GitHub Actions is configured to automate testing and linting, ensuring code qual
 
 ![screenshots/cd.png](screenshots/cd.png)
 
+![screenshots/cd.png](screenshots/live_get.png)
+
+![screenshots/cd.png](screenshots/live_post.png)
+
+The start command on render is:
+
+![screenshots/cd.png](screenshots/start_command.png)
+
 ## Project Achievements
 
 - Successfully trained a classification ML model to predict salary categories.
-- Deployed a FastAPI app on Heroku, making the ML model accessible via a web endpoint.
+- Deployed a FastAPI app on Render, making the ML model accessible via a web endpoint.
 - Integrated CI/CD workflows for automated testing and deployment.

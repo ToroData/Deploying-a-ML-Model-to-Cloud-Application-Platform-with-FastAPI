@@ -1,3 +1,7 @@
+"""Script to create the functions to train machine learning model.
+Author: Ricard Santiago Raigada García
+Date: February, 2024
+"""
 import sys
 import logging
 from sklearn.ensemble import RandomForestClassifier
@@ -5,7 +9,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import fbeta_score, precision_score, recall_score, confusion_matrix
 
 
-# Optional: implement hyperparameter tuning.
+
 def train_model(X_train, y_train):
     """
     Trains a machine learning model using RandomForest and returns it.
@@ -37,7 +41,12 @@ def train_model(X_train, y_train):
 
     # Initialize GridSearchCV with two threads (n_jobs=2)
     logging.info("Initialize GridSearchCV with two threads (n_jobs=2)")
-    grid_search = GridSearchCV(estimator=rf, param_grid=param_grid, cv=5, n_jobs=2, scoring='accuracy')
+    grid_search = GridSearchCV(
+        estimator=rf,
+        param_grid=param_grid,
+        cv=5,
+        n_jobs=2,
+        scoring='accuracy')
 
     # Fit GridSearchCV to the training data
     logging.info("Fit GridSearchCV to the training data")
@@ -119,18 +128,20 @@ def evaluate_model_on_slices(model, X, y, categorical_features, encoder):
     output = ""
     logging.info("Evaluating model on slices...")
     feature_names = encoder.get_feature_names_out(categorical_features)
-    
+
     for feature in categorical_features:
-        feature_indices = [i for i, name in enumerate(feature_names) if name.startswith(f"{feature}_")]
+        feature_indices = [i for i, name in enumerate(
+            feature_names) if name.startswith(f"{feature}_")]
         for idx in feature_indices:
             category = feature_names[idx].split('_')[-1]
             subset_mask = X[:, idx] == 1
             X_subset = X[subset_mask]
             y_subset = y[subset_mask]
-            
+
             if len(y_subset) > 0:
                 preds_subset = inference(model, X_subset)
-                precision, recall, fbeta = compute_model_metrics(y_subset, preds_subset)
+                precision, recall, fbeta = compute_model_metrics(
+                    y_subset, preds_subset)
                 output += f"Performance on slice '{feature}={category}': Precision={precision}, Recall={recall}, F-beta={fbeta}\n"
             else:
                 output += f"No samples for slice '{feature}={category}'.\n"
