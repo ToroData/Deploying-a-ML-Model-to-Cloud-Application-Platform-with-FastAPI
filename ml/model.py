@@ -133,20 +133,19 @@ def evaluate_model_on_slices(model, X, y, categorical_features, encoder):
     # Get the feature names after one-hot encoding
     feature_names = encoder.get_feature_names_out(categorical_features)
     
-    with open('slice_output.txt', 'w') as f:
-        with redirect_stdout(f):
-            for feature in categorical_features:
-                feature_indices = [i for i, name in enumerate(feature_names) if name.startswith(f"{feature}_")]
-                
-                for idx in feature_indices:
-                    category = feature_names[idx].split('_')[-1]
-                    subset_mask = X[:, idx] == 1
-                    X_subset = X[subset_mask]
-                    y_subset = y[subset_mask]
-                    
-                    if len(y_subset) > 0:
-                        preds_subset = inference(model, X_subset)
-                        precision, recall, fbeta = compute_model_metrics(y_subset, preds_subset)
-                        print(f"Performance on slice '{feature}={category}': Precision={precision}, Recall={recall}, F-beta={fbeta}")
-                    else:
-                        print(f"No samples for slice '{feature}={category}'.")
+    for feature in categorical_features:
+        # Find the indices for the categories of the current feature
+        feature_indices = [i for i, name in enumerate(feature_names) if name.startswith(f"{feature}_")]
+        
+        for idx in feature_indices:
+            category = feature_names[idx].split('_')[-1]
+            subset_mask = X[:, idx] == 1
+            X_subset = X[subset_mask]
+            y_subset = y[subset_mask]
+            
+            if len(y_subset) > 0:
+                preds_subset = inference(model, X_subset)
+                precision, recall, fbeta = compute_model_metrics(y_subset, preds_subset)
+                print(f"Performance on slice '{feature}={category}': Precision={precision}, Recall={recall}, F-beta={fbeta}")
+            else:
+                print(f"No samples for slice '{feature}={category}'.")
