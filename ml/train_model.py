@@ -9,9 +9,10 @@ import sys
 import logging
 import pandas as pd
 import numpy as np
+from contextlib import redirect_stdout
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelBinarizer, OneHotEncoder
-from ml.model import train_model, compute_model_metrics, inference
+from ml.model import train_model, compute_model_metrics, inference, evaluate_model_on_slices
 from preprocess.clean import process_data
 
 # Logging configuration
@@ -141,5 +142,7 @@ preds = inference(model, X_test)
 
 # Calculate metrics
 precision, recall, fbeta = compute_model_metrics(y_test, preds)
+
+# evaluate_model_on_slices(model, X_train, y_train, cat_features, encoder)
 
 print(f"Precision: {precision}, Recall: {recall}, F-beta: {fbeta}")
